@@ -1,4 +1,6 @@
+// Header.js
 import React from 'react';
+import { Link } from 'react-router-dom'; 
 import logo from '../assets/logo.png'; 
 
 const Header = () => {
@@ -16,7 +18,7 @@ const Header = () => {
       </div>
       <nav>
         <ul>
-          <li>MY 강의</li>
+          <li><Link to="/my-courses">MY 강의</Link></li> {/* Link로 감싸기 */}
           <li>학습노트</li>
           <li>퀴즈</li>
           <li>로드맵</li>
