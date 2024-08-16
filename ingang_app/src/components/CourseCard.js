@@ -1,3 +1,4 @@
+//CourseCard.js
 import React from 'react';
 
 const CourseCard = ({ title, image, price }) => {

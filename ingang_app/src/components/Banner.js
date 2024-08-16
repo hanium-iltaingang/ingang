@@ -1,3 +1,4 @@
+//Banner.js
 import React from 'react';
 import CourseCard from './CourseCard';
 import awsImage from '../assets/event_01.png';
