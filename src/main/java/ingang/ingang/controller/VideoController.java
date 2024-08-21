@@ -21,7 +21,7 @@ public class VideoController {
     public ResponseEntity<String> transcribeAudio(@RequestParam String youtubeUrl) {
         try {
             // Python 스크립트 경로와 인자 설정
-            String pythonScriptPath = "/path/to/your/script.py";
+            String pythonScriptPath = "src/main/resources/python/whisper_script.py";
             ProcessBuilder processBuilder = new ProcessBuilder("python3", pythonScriptPath, youtubeUrl);
             Process process = processBuilder.start();
 
