@@ -1,7 +1,8 @@
-//CourseCard.js
+// CourseCard.js
+// 특정 강의를 카드 형태로 표시 - 메인 페이지에 사용
 import React from 'react';
 
-const CourseCard = ({ title, image, price }) => {
+const CourseCard = ({ title, image, price }) => { // 강의 카드의 내용을 구성
   return (
     <div className="course-card">
       <img src={image} alt={`강의 이미지: ${title}`} />

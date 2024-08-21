@@ -1,17 +1,18 @@
 //Banner.js
+// 웹사이트의 배너&상단 영역을 구성
 import React from 'react';
 import CourseCard from './CourseCard';
 import awsImage from '../assets/event_01.png';
 import sparkImage from '../assets/event_02.png';
 import pythonImage from '../assets/event_03.png';
 
-const courseData = [
+const courseData = [ // 강의 정보
   { title: "[웹개발/고급] 스프링부트 이용자를 위한 클라우드 입문(AWS, Docker)", image: awsImage, price: "25,300원" },
   { title: "[데이터/고급] Spark과 SparkML을 이용한 모델 훈련", image: sparkImage, price: "29,700원" },
   { title: "[IT일반/중급] Python 기초 실습 코스", image: pythonImage, price: "55,000원" },
 ];
 
-const Banner = () => {
+const Banner = () => { // 전체 배너를 렌더링
   return (
     <div className="banner">
       <h1 className="section-title">편리한 인터넷 강의 학습, 일타인강 서비스로!</h1>

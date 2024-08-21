@@ -1,4 +1,5 @@
 // MyCourses.js
+// MY 강의 페이지 - 비디오 구현
 import React from 'react';
 
 const MyCourses = ({ videoId }) => {
@@ -6,12 +7,12 @@ const MyCourses = ({ videoId }) => {
     <div className="my-courses-container">
       <div className="video-wrapper">
         <iframe 
-          src={`https://www.youtube.com/embed/${videoId}?si=WEWv1y5QUSGuSCvP`} 
+          src={`https://www.youtube.com/embed/${videoId}?si=WEWv1y5QUSGuSCvP`} // YouTube 비디오의 URL
           title="YouTube video player" 
           frameBorder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-          referrerPolicy="strict-origin-when-cross-origin" 
-          allowFullScreen
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" // 비디오 플레이어의 기능을 제어
+          referrerPolicy="strict-origin-when-cross-origin" // 보안
+          allowFullScreen // 전체 화면 모드
           className="youtube-video" 
         ></iframe>
       </div>

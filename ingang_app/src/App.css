@@ -1,5 +1,6 @@
 /*App.css*/
-:root {
+
+:root { /*색상 값을 변수로 정의*/
   --primary-color: #007bff;
   --primary-color-dark: #0056b3;
   --background-color: #f8f9fa;
@@ -9,7 +10,7 @@
   --highlight-color: #ff6b6b;
 }
 
-body {
+body { /*전체 페이지에 대한 기본 스타일*/
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -20,13 +21,14 @@ body {
   overflow-y: auto;
 }
 
+/*헤더의 레이아웃과 스타일을 정의*/
 .header {
   padding: 20px;
   background-color: var(--background-color);
   border-bottom: 1px solid var(--border-color);
 }
 
-.top-bar {
+.top-bar { 
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -40,9 +42,9 @@ body {
   margin-left: 5cm;
 }
 
-.logo {
-  height: 100px; /* 로고의 높이를 100px로 설정 */
-  width: auto;   /* 너비를 자동으로 조정하여 비율을 유지 */
+.logo { 
+  height: 100px; 
+  width: auto;   
   margin: 0 70px;
 }
 
@@ -113,7 +115,7 @@ nav ul li:active {
 
 nav ul li a {
   text-decoration: none; /* 밑줄 제거 */
-  color: inherit; /* 부모 요소의 색상을 상속받음 */
+  color: inherit; /* 부모 요소의 색상을 상속 */
 }
 
 nav ul li a:hover {
@@ -130,6 +132,7 @@ nav ul li a:visited {
   color: inherit; /* 방문한 링크도 다른 링크와 동일한 색상 */
   text-decoration: none; /* 방문한 링크에서 밑줄 제거 */
 }
+
 /*메인 페이지*/
 .banner {
   display: flex;
@@ -193,6 +196,7 @@ nav ul li a:visited {
   font-weight: bold;
 }
 
+/*반응형 디자인으로 화면 크기에 따라 레이아웃을 조정*/
 @media (max-width: 768px) {
   .top-bar {
     flex-direction: column;
@@ -225,7 +229,7 @@ nav ul li a:visited {
   }
 }
 
-/*MY 강의 페이지*/
+/*MY 강의 페이지 : 비디오와 노트 섹션의 레이아웃과 스타일을 정의*/
 .my-courses-container {
   display: flex;
   justify-content: center;
