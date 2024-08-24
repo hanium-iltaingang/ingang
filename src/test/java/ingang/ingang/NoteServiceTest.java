@@ -7,7 +7,8 @@ import ingang.ingang.repository.NoteRepository;
 import ingang.ingang.service.NoteService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +20,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 public class NoteServiceTest {
 
-    @Autowired
-    private NoteService noteService;
-
-    @Autowired
+    @Mock
     private NoteRepository noteRepository;
+
+    @InjectMocks
+    private NoteService noteService;
 
     @BeforeEach
     void setUp() {
