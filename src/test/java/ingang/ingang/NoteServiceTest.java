@@ -7,17 +7,19 @@ import ingang.ingang.repository.NoteRepository;
 import ingang.ingang.service.NoteService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@Transactional
+@ExtendWith(MockitoExtension.class)
 public class NoteServiceTest {
 
     @Mock
@@ -26,38 +28,38 @@ public class NoteServiceTest {
     @InjectMocks
     private NoteService noteService;
 
+    private NoteEntity note1;
+    private NoteEntity note2;
+
     @BeforeEach
     void setUp() {
-        NoteEntity note1 = NoteEntity.builder()
-                .id(1L)
-                .title("Title 1")
-                .contents("content 1")
-                .author("author 1")
-                .build();
+        note1 = createNote(1L, "Title 1", "Content 1", "author 1");
+        note2 = createNote(2L, "Title 2", "Content 2", "author 2");
+    }
 
-        NoteEntity note2 = NoteEntity.builder()
-                .id(2L)
-                .title("Title 2")
-                .contents("content 2")
-                .author("author 2")
+    private NoteEntity createNote(Long id, String title, String contents, String author){
+        return NoteEntity.builder()
+                .id(id)
+                .title(title)
+                .contents(contents)
+                .author(author)
                 .build();
-
-        noteRepository.save(note1);
-        noteRepository.save(note2);
     }
 
     //전체 노트 목록 조회
     @Test
     void NoteList() {
-        //given -> setUp()
+        //given
+        List<NoteEntity> notes = List.of(note1, note2);
 
         //when
-        List<NoteResponseDto> noteResponseDtos = noteService.noteList();
+        when(noteRepository.findAll()).thenReturn(notes);
+        List<NoteResponseDto> responses = noteService.noteList();
 
         //then
-        assertThat(noteResponseDtos.size()).isEqualTo(2);
-        assertThat(noteResponseDtos.get(0).getTitle()).isEqualTo("Title 1");
-        assertThat(noteResponseDtos.get(1).getTitle()).isEqualTo("Title 2");
+        assertThat(responses.size()).isEqualTo(2);
+        assertThat(responses.get(0).title()).isEqualTo("Title 1");
+        assertThat(responses.get(1).title()).isEqualTo("Title 2");
 
     }
 
@@ -65,72 +67,69 @@ public class NoteServiceTest {
     @Test
     void NoteShow() {
         //given
-        NoteEntity note = noteRepository.findAll().get(0);
-        Long noteId = note.getId();
+    when(noteRepository.findById(1L)).thenReturn(Optional.of(note1));
 
         //when
-        NoteResponseDto noteResponse = noteService.noteShow(noteId);
+        NoteResponseDto noteResponse = noteService.noteShow(1L);
 
         //then
-        assertThat(noteResponse.getId()).isEqualTo(noteId);
-        assertThat(noteResponse.getTitle()).isEqualTo("Title 1");
+        assertThat(noteResponse.id()).isEqualTo(1L);
+        assertThat(noteResponse.title()).isEqualTo("Title 1");
     }
 
     //노트 생성
     @Test
     void NoteCreate() {
         //given
-        NoteRequestDto requestDto = NoteRequestDto.builder()
+        NoteRequestDto requestDto = new NoteRequestDto(null, "New Title", "New Content", "New Author");
+        NoteEntity noteToSave = requestDto.toEntity();
+        NoteEntity savedNote = NoteEntity.builder()
+                .id(3L)
                 .title("New Title")
                 .contents("New Content")
                 .author("New Author")
                 .build();
 
+        when(noteRepository.save(any(NoteEntity.class))).thenReturn(savedNote);
+
         //when
         NoteResponseDto createdNote = noteService.create(requestDto);
 
         //then
-        assertThat(createdNote.getTitle()).isEqualTo("New Title");
-        assertThat(createdNote.getContents()).isEqualTo("New Content");
-        assertThat(noteRepository.findById(createdNote.getId()).isPresent()).isTrue();
+        assertThat(createdNote).isNotNull();
+        assertThat(createdNote.title()).isEqualTo("New Title");
+        assertThat(createdNote.contents()).isEqualTo("New Content");
+        assertThat(createdNote.id()).isEqualTo(3L);
     }
 
     //노트 삭제
     @Test
     void NoteDelete() {
         //given
-        NoteEntity note = noteRepository.findAll().get(0);
-        Long noteId = note.getId();
-        NoteRequestDto requestDto = NoteRequestDto.builder()
-                .id(noteId)
-                .build();
+        when(noteRepository.findById(1L)).thenReturn(Optional.of(note1));
+        doNothing().when(noteRepository).deleteById(1L);
 
         //when
-        String message = noteService.noteDelete(requestDto);
+        String message = noteService.noteDelete(1L);
 
         //then
-        assertThat(message).isEqualTo("delete success");
-        assertThat(noteRepository.findById(noteId).isPresent()).isFalse();
+        assertThat(message).isEqualTo("삭제가 완료되었습니다.");
+        verify(noteRepository).deleteById(1L);
     }
 
     //노트 편집
     @Test
     void NoteEdit() {
         //given
-        NoteEntity note = noteRepository.findAll().get(0);
-        Long noteId = note.getId();
-        NoteRequestDto requestDto = NoteRequestDto.builder()
-                .id(noteId)
-                .title("Updated Title")
-                .contents("Updated Content")
-                .build();
+        NoteRequestDto requestDto = new NoteRequestDto(1L, "Updated Title", "Updated Content", null);
+        when(noteRepository.findById(1L)).thenReturn(Optional.of(note1));
 
         //when
         NoteResponseDto updatedNote = noteService.noteEdit(requestDto);
 
         //then
-        assertThat(updatedNote.getTitle()).isEqualTo("Updated Title");
-        assertThat(updatedNote.getContents()).isEqualTo("Updated Content");
+        assertThat(updatedNote.title()).isEqualTo("Updated Title");
+        assertThat(updatedNote.contents()).isEqualTo("Updated Content");
     }
 
 }
