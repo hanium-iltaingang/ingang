@@ -7,24 +7,17 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 
-@Getter
-@ToString
-@NoArgsConstructor
-public class NoteResponseDto {
+public record NoteResponseDto (Long id, String title, String contents, String author,
+                               LocalDateTime createdAt, LocalDateTime modifiedAt){
 
-    private Long id;
-    private String title;
-    private String contents;
-    private String author;
-    private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
-
-    public NoteResponseDto(NoteEntity entity) {
-        this.id = entity.getId();
-        this.title = entity.getTitle();
-        this.contents = entity.getContents();
-        this.author = entity.getAuthor();
-        this.createdAt = entity.getCreatedAt();
-        this.modifiedAt = entity.getModifiedAt();
+    public static NoteResponseDto from(NoteEntity entity) {
+        return new NoteResponseDto(
+                entity.getId(),
+                entity.getTitle(),
+                entity.getContents(),
+                entity.getAuthor(),
+                entity.getCreatedAt(),
+                entity.getModifiedAt()
+        );
     }
 }

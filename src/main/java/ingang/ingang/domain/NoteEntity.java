@@ -1,6 +1,5 @@
 package ingang.ingang.domain;
 
-import ingang.ingang.dto.NoteRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,8 +23,7 @@ public class NoteEntity extends TimeStamp {
     private String author;
 
     @Builder
-    public NoteEntity(Long id, String title,
-                      String contents, String author) {
+    public NoteEntity(Long id, String title, String contents, String author) {
         this.id = id;
         this.title = title;
         this.contents = contents;

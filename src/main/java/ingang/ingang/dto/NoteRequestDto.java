@@ -1,25 +1,15 @@
 package ingang.ingang.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import ingang.ingang.domain.NoteEntity;
 
-@Getter
-@ToString
-public class NoteRequestDto {
+public record NoteRequestDto(Long id, String title, String contents, String author) {
 
-    private Long id;
-    private String title;
-    private String contents;
-    private String author;
-
-    @Builder
-
-    public NoteRequestDto(Long id, String title,
-                          String contents, String author) {
-        this.id = id;
-        this.title = title;
-        this.contents = contents;
-        this.author = author;
+    public NoteEntity toEntity() {
+        return NoteEntity.builder()
+                .id(this.id())
+                .title(this.title())
+                .contents(this.contents())
+                .author(this.author())
+                .build();
     }
 }
