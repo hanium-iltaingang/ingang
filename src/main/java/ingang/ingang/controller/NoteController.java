@@ -72,10 +72,9 @@ public class NoteController {
             @ApiResponse(responseCode = "404", description = "실패"),
     })
     public String noteDelete(
-            @PathVariable Long notesid,
-            @RequestBody NoteRequestDto noteRequestDto
+            @PathVariable Long notesid
     ) {
-        return noteService.noteDelete(noteRequestDto);
+        return noteService.noteDelete(notesid);
     }
 
     //노트 편집
