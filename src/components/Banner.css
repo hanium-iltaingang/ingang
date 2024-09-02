@@ -1,0 +1,33 @@
+/*Banner.css*/
+.banner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    background-color: var(--background-color);
+    text-align: center;
+  }
+  
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: var(--text-color-dark);
+  }
+  
+  .section-description {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: var(--text-color-light);
+    margin-bottom: 40px;
+  }
+  
+  .course-cards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 20px;
+  }
+  

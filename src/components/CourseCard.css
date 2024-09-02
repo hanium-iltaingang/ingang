@@ -1,0 +1,28 @@
+/*CourseCard.css*/
+.course-card {
+    width: 300px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: left;
+  }
+  
+  .course-card img {
+    width: 100%;
+    border-radius: 8px;
+  }
+  
+  .course-card h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 15px 0 10px;
+    color: var(--text-color-dark);
+  }
+  
+  .course-card p {
+    font-size: 1.1rem;
+    color: var(--highlight-color);
+    font-weight: bold;
+  }
+  
