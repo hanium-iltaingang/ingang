@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './MyCourses.css';
-import { startSTT, fetchNotes, fetchNote, createNote, editNote } from '../api/api'; // API 함수 import
+import { startSTT, createNote, editNote } from '../api/api'; // API 함수 import
 
 const MyCourses = ({ videoId }) => {
-  const [notes, setNotes] = useState([]); // 노트 목록 상태
   const [selectedNote, setSelectedNote] = useState(null); // 선택된 노트 상태
   const [editing, setEditing] = useState(false); // 편집 모드 상태
   const [title, setTitle] = useState(''); // 노트 제목 상태
@@ -23,16 +22,6 @@ const MyCourses = ({ videoId }) => {
     }, 3000);
   };
 
-  // 학습 노트 목록을 가져오는 함수
-  const fetchNotesContent = async () => {
-    try {
-      const data = await fetchNotes(); // API 요청을 통해 학습 노트 목록을 가져옴
-      setNotes(data);
-    } catch (error) {
-      console.error('노트 목록을 가져오는 중 오류 발생:', error);
-    }
-  };
-
   useEffect(() => {
     // YouTube 영상이 재생될 때 백엔드에 STT 요청을 보냄
     const handleVideoPlay = async () => {
@@ -40,7 +29,6 @@ const MyCourses = ({ videoId }) => {
         const data = await startSTT(videoId); // API 요청을 통해 STT 작업을 시작
         if (data.success) {
           console.log('STT 작업 시작됨');
-          fetchNotesContent(); // 노트 목록을 다시 가져와서 화면에 업데이트
         } else {
           console.error('STT 작업 실패:', data.message);
         }
@@ -53,8 +41,6 @@ const MyCourses = ({ videoId }) => {
     if (iframe) {
       iframe.addEventListener('play', handleVideoPlay);
     }
-
-    fetchNotesContent(); // 컴포넌트가 마운트될 때 학습 노트를 가져옴
 
     return () => {
       if (iframe) {
@@ -69,7 +55,6 @@ const MyCourses = ({ videoId }) => {
       const data = await startSTT(videoId);
       if (data.success) {
         console.log('STT 작업 시작됨');
-        await fetchNotesContent();
       } else {
         console.error('STT 작업 실패:', data.message);
       }
@@ -82,33 +67,19 @@ const MyCourses = ({ videoId }) => {
   const handleSaveNote = async () => {
     try {
       if (editing && selectedNote) {
-        await editNote(selectedNote.id, title, contents, author); // 기존 노트 수정, author는 고정된 값
+        await editNote(selectedNote.id, title, contents, author); // 기존 노트 수정
         displayMessage('노트가 성공적으로 수정되었습니다.', 'blue');
       } else {
-        await createNote(0, title, contents, author); // 새로운 노트 생성할 때 author는 고정된 값
+        await createNote(0, title, contents, author); // 새로운 노트 생성
         displayMessage('노트가 성공적으로 저장되었습니다.', 'blue');
       }
-      setEditing(false); // 편집 모드 종료
+
       setSelectedNote(null); // 선택된 노트 초기화
       setTitle(''); // 노트 제목 초기화
-      setContents(''); // 노트 내용 초기화 (content -> contents)
-      await fetchNotesContent(); // 저장 후 최신 노트 목록 불러오기
+      setContents(''); // 노트 내용 초기화
     } catch (error) {
       console.error('노트 저장 중 오류 발생:', error);
       displayMessage('노트 저장에 실패했습니다.', 'red');
-    }
-  };
-
-  // 노트 편집 모드 진입 핸들러
-  const handleEditNote = async (notesid) => {
-    try {
-      const note = await fetchNote(notesid); // 특정 노트를 API 요청을 통해 가져옴
-      setSelectedNote(note); // 선택된 노트 설정
-      setTitle(note.title); // 노트 제목 설정
-      setContents(note.contents); // 노트 내용 설정 (content -> contents)
-      setEditing(true); // 편집 모드 활성화
-    } catch (error) {
-      console.error('노트를 가져오는 중 오류 발생:', error);
     }
   };
 
@@ -143,6 +114,7 @@ const MyCourses = ({ videoId }) => {
           )}
           <button className="new-note-btn" onClick={() => setEditing(true)}>새 노트 작성</button>
         </div>
+
         {editing ? (
           <div className="edit-notes">
             <label>
@@ -157,31 +129,20 @@ const MyCourses = ({ videoId }) => {
               <textarea
                 className="note-content" 
                 placeholder="노트 내용을 입력하세요" 
-                value={contents} // (content -> contents)
-                onChange={(e) => setContents(e.target.value)} // (content -> contents)
+                value={contents} 
+                onChange={(e) => setContents(e.target.value)} 
               />
             </label>
             <button onClick={handleSaveNote}>저장</button>
           </div>
         ) : (
-          <div className="notes-container">
-            <div>
-              {notes.map((note) => (
-                <div key={note.id} onClick={() => handleEditNote(note.id)}>
-                  <h2>{note.title}</h2>
-                  <p>{note.contents}</p> {/* content -> contents */}
-                  <p><em>{note.author}</em></p> {/* 작성자 표시 */}
-                </div>
-              ))}
-            </div>
-            <div className="fetch-stt-container">
-              <button onClick={handleFetchSTT}>STT 파일 불러오기</button>
-            </div>
+          <div className="fetch-stt-container">
+            <button onClick={handleFetchSTT}>STT 파일 불러오기</button>
           </div>
         )}
       </div>
     </div>
-  );
+  );  
 };
 
 export default MyCourses;
