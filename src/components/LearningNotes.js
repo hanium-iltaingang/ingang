@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './LearningNotes.css';
-import { fetchNotes, fetchNote } from '../api/api'; // API 함수 import
+import { fetchNotes, fetchNote, deleteNote } from '../api/api'; // 삭제 API 추가
 
 const LearningNotes = () => {
   const [notes, setNotes] = useState([]); // 노트 목록 상태
@@ -29,6 +29,17 @@ const LearningNotes = () => {
     }
   };
 
+  // 노트 삭제 함수
+  const handleDeleteNote = async (noteId) => {
+    try {
+      await deleteNote(noteId); // 노트 삭제 API 호출
+      fetchNotesContent(); // 삭제 후 노트 목록을 다시 가져옴
+    } catch (error) {
+      console.error('노트를 삭제하는 중 오류 발생:', error);
+      setErrorMessage('노트를 삭제하는 중 오류가 발생했습니다.');
+    }
+  };
+
   useEffect(() => {
     fetchNotesContent(); // 컴포넌트가 마운트될 때 노트 목록을 가져옴
   }, []);
@@ -45,8 +56,9 @@ const LearningNotes = () => {
             onClick={() => handleNoteClick(note.id)}
           >
             <h2>{note.title}</h2>
-            <p>{note.contents.slice(0, 100)}...</p> {/* 노트 내용 미리보기 (100자까지 표시) */}
+            <p>{note.contents.slice(0, 100)}...</p> {/* 노트 내용 미리보기 */}
             <p className="note-date">{note.date}</p>
+            <button onClick={() => handleDeleteNote(note.id)}>삭제</button> {/* 삭제 버튼 추가 */}
           </div>
         ))}
       </div>

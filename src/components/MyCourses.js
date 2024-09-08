@@ -1,3 +1,4 @@
+//Mycourses.js
 import React, { useEffect, useState } from 'react';
 import './MyCourses.css';
 import { startSTT, createNote, editNote } from '../api/api'; // API 함수 import
