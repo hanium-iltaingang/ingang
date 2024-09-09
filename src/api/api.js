@@ -1,11 +1,10 @@
-//api.js
+// api.js
 import axios from './axiosConfig';
 
-// STT 작업을 시작하는 API 요청 함수
 export const startSTT = async (youtubeUrl) => {
   try {
     const response = await axios.post('/video/transcribe', null, {
-      params: { youtubeUrl }
+      params: { youtubeUrl } // 쿼리 파라미터로 전송
     });
     return response.data;
   } catch (error) {
@@ -13,6 +12,7 @@ export const startSTT = async (youtubeUrl) => {
     throw error;
   }
 };
+
 
 // 학습 노트를 가져오는 API 요청 함수
 export const fetchNotes = async () => {
@@ -39,7 +39,7 @@ export const fetchNote = async (notesid) => {
 // 학습 노트를 생성하는 API 요청 함수
 export const createNote = async (notesid, title, contents, author = 'Default Author') => {
   try {
-    const response = await axios.post(`/note/${notesid}`, { title, contents, author }); // 필드명을 content -> contents로 수정
+    const response = await axios.post(`/note/${notesid}`, { title, contents, author });
     return response.data;
   } catch (error) {
     console.error('노트를 생성하는 중 오류 발생:', error);
@@ -58,15 +58,13 @@ export const deleteNote = async (notesid) => {
   }
 };
 
-
 // 학습 노트를 편집하는 API 요청 함수 (notesid를 사용)
 export const editNote = async (notesid, title, contents, author = 'Default Author') => {
   try {
-    const response = await axios.patch(`/note/${notesid}`, { title, contents, author }); // 필드명을 content -> contents로 수정
+    const response = await axios.patch(`/note/${notesid}`, { title, contents, author });
     return response.data;
   } catch (error) {
     console.error('노트를 편집하는 중 오류 발생:', error);
     throw error;
   }
 };
-

@@ -1,4 +1,3 @@
-//Mycourses.js
 import React, { useEffect, useState } from 'react';
 import './MyCourses.css';
 import { startSTT, createNote, editNote } from '../api/api'; // API 함수 import
@@ -7,7 +6,7 @@ const MyCourses = ({ videoId }) => {
   const [selectedNote, setSelectedNote] = useState(null); // 선택된 노트 상태
   const [editing, setEditing] = useState(false); // 편집 모드 상태
   const [title, setTitle] = useState(''); // 노트 제목 상태
-  const [contents, setContents] = useState(''); // 노트 내용 상태 (content -> contents)
+  const [contents, setContents] = useState(''); // 노트 내용 상태
   const [message, setMessage] = useState(''); // 일반 메시지 상태
   const [messageColor, setMessageColor] = useState(''); // 메시지 색상 상태
 
@@ -24,43 +23,51 @@ const MyCourses = ({ videoId }) => {
   };
 
   useEffect(() => {
-    // YouTube 영상이 재생될 때 백엔드에 STT 요청을 보냄
-    const handleVideoPlay = async () => {
-      try {
-        const data = await startSTT(videoId); // API 요청을 통해 STT 작업을 시작
-        if (data.success) {
-          console.log('STT 작업 시작됨');
-        } else {
-          console.error('STT 작업 실패:', data.message);
-        }
-      } catch (error) {
-        console.error('STT 요청 중 오류 발생:', error);
+    const loadYouTubeAPI = () => {
+      // YouTube API가 로드되었는지 확인
+      if (!window.YT) {
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
       }
     };
 
-    const iframe = document.querySelector('.youtube-video');
-    if (iframe) {
-      iframe.addEventListener('play', handleVideoPlay);
-    }
+    const onYouTubeIframeAPIReady = () => {
+      new window.YT.Player('youtube-player', {
+        events: {
+          // YouTube 동영상 관련 이벤트 정의가 필요 없다
+        },
+      });
+    };
+
+    // YouTube IFrame API가 로드되면 실행할 콜백 설정
+    window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+    loadYouTubeAPI();
 
     return () => {
-      if (iframe) {
-        iframe.removeEventListener('play', handleVideoPlay);
+      if (window.YT && window.YT.Player) {
+        window.YT.Player.prototype.destroy();
       }
     };
   }, [videoId]);
 
-  // STT 요청 중 오류 처리
-  const handleFetchSTT = async () => {
+  // STT 작업을 수동으로 실행하는 함수
+  const handleSTT = async () => {
     try {
-      const data = await startSTT(videoId);
-      if (data.success) {
-        console.log('STT 작업 시작됨');
+      const youtubeUrl = `https://www.youtube.com/watch?v=${videoId}`;
+      console.log('STT 요청에 사용되는 유튜브 URL:', youtubeUrl);
+      const data = await startSTT(youtubeUrl); // STT 요청
+      if (data.transcription) {
+        displayMessage('STT 작업이 성공적으로 완료되었습니다.', 'blue');
+        console.log('STT 변환 결과:', data.transcription); // 변환된 텍스트를 콘솔에 출력
       } else {
-        console.error('STT 작업 실패:', data.message);
+        displayMessage('STT 작업 실패: ' + data.message, 'red');
+        console.error('STT 작업 실패:', data.message); // 실패 메시지 처리
       }
     } catch (error) {
-      console.error('STT 요청 중 오류 발생:', error);
+      displayMessage('STT 요청 중 오류 발생: ' + error.message, 'red');
+      console.error('STT 요청 중 오류 발생:', error); // 오류 발생 시 로그 출력
     }
   };
 
@@ -89,20 +96,21 @@ const MyCourses = ({ videoId }) => {
     setSelectedNote(null); // 선택된 노트 초기화
     setEditing(false); // 편집 모드 종료
     setTitle(''); // 노트 제목 초기화
-    setContents(''); // 노트 내용 초기화 (content -> contents)
+    setContents(''); // 노트 내용 초기화
   };
 
   return (
     <div className="my-courses-container">
       <div className="video-wrapper">
-        <iframe 
+        <iframe
+          id="youtube-player"
           src={`https://www.youtube.com/embed/${videoId}?enablejsapi=1`}
-          title="YouTube video player" 
-          frameBorder="0" 
+          title="YouTube video player"
+          frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerPolicy="strict-origin-when-cross-origin" 
-          allowFullScreen 
-          className="youtube-video" 
+          referrerPolicy="strict-origin-when-cross-origin"
+          allowFullScreen
+          className="youtube-video"
         ></iframe>
       </div>
       <div className="course-notes">
@@ -138,12 +146,12 @@ const MyCourses = ({ videoId }) => {
           </div>
         ) : (
           <div className="fetch-stt-container">
-            <button onClick={handleFetchSTT}>STT 파일 불러오기</button>
+            <button onClick={handleSTT}>STT 변환 시작하기</button> {/* 수동으로 STT 실행 */}
           </div>
         )}
       </div>
     </div>
-  );  
+  );
 };
 
 export default MyCourses;

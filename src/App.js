@@ -40,7 +40,7 @@ function App() {
           />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/my-courses" element={<MyCourses videoId="X1BXdhgUeUs" />} /> {/* videoId를 추가하여 전달 */}
+          <Route path="/my-courses" element={<MyCourses videoId="SE6Y5BFblsg" />} /> {/* videoId를 추가하여 전달 */}
           <Route path="/learning-notes" element={<LearningNotes />} />
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/road-map" element={<Roadmap />} />
