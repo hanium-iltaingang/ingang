@@ -9,6 +9,10 @@ const MyCourses = ({ videoId }) => {
   const [contents, setContents] = useState(''); // 노트 내용 상태
   const [message, setMessage] = useState(''); // 일반 메시지 상태
   const [messageColor, setMessageColor] = useState(''); // 메시지 색상 상태
+  const [timestamps, setTimestamps] = useState([]); // 타임스탬프 상태 추가
+  const [player, setPlayer] = useState(null); // YouTube Player 인스턴스 상태 추가
+  const [timestampSeconds, setTimestampSeconds] = useState([]); // 타임스탬프의 초 단위 시간 상태 추가
+  const [playerReady, setPlayerReady] = useState(false); // YouTube Player가 준비되었는지 확인하는 상태
 
   // 고정된 작성자 (하드코딩된 값)
   const author = "Default Author";
@@ -23,34 +27,93 @@ const MyCourses = ({ videoId }) => {
   };
 
   useEffect(() => {
+    // YouTube IFrame API 로드
     const loadYouTubeAPI = () => {
-      // YouTube API가 로드되었는지 확인
       if (!window.YT) {
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         const firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      } else {
+        onYouTubeIframeAPIReady();
       }
     };
 
+    // YouTube Player 준비
     const onYouTubeIframeAPIReady = () => {
-      new window.YT.Player('youtube-player', {
-        events: {
-          // YouTube 동영상 관련 이벤트 정의가 필요 없다
-        },
-      });
+      if (window.YT && window.YT.Player) {
+        const ytPlayer = new window.YT.Player('youtube-player', {
+          videoId: videoId,
+          events: {
+            onReady: (event) => {
+              setPlayer(event.target); // YouTube Player 인스턴스 설정
+              setPlayerReady(true); // YouTube Player가 준비된 상태로 설정
+              console.log("YouTube Player가 준비되었습니다.");
+            },
+          },
+        });
+      } else {
+        console.error("YouTube IFrame API가 로드되지 않았습니다.");
+      }
     };
 
-    // YouTube IFrame API가 로드되면 실행할 콜백 설정
-    window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+    // 일정 주기로 YouTube API 로드 여부 확인
+    const checkAPIReady = setInterval(() => {
+      if (window.YT && window.YT.Player) {
+        onYouTubeIframeAPIReady();
+        clearInterval(checkAPIReady);
+      }
+    }, 100);
+
     loadYouTubeAPI();
 
     return () => {
+      clearInterval(checkAPIReady);
       if (window.YT && window.YT.Player) {
         window.YT.Player.prototype.destroy();
       }
     };
   }, [videoId]);
+
+  // 타임스탬프를 생성하는 함수
+  const generateTimestamps = () => {
+    if (player) {
+      const duration = player.getDuration(); // 전체 영상 길이 (초 단위)
+      console.log('전체 영상 시간:', duration);
+
+      if (duration > 0) {
+        const interval = duration / 5; // 5등분
+
+        const newTimestamps = [];
+        const newTimestampSeconds = [];
+        for (let i = 1; i <= 5; i++) {
+          const timeInSeconds = Math.floor(interval * i);
+          newTimestamps.push(formatTimestamp(timeInSeconds));
+          newTimestampSeconds.push(timeInSeconds); // 초 단위 시간을 배열에 저장
+        }
+
+        setTimestamps(newTimestamps); // 타임스탬프 상태 업데이트
+        setTimestampSeconds(newTimestampSeconds); // 초 단위 시간 상태 업데이트
+      } else {
+        console.error("동영상 시간이 로드되지 않았습니다.");
+        displayMessage('동영상 시간이 로드되지 않았습니다. 잠시 후 다시 시도해주세요.', 'red');
+      }
+    }
+  };
+
+  // 초 단위 시간을 mm:ss 형식으로 변환하는 함수
+  const formatTimestamp = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+
+  // 타임스탬프를 클릭하면 해당 시간으로 이동하는 함수
+  const handleTimestampClick = (timeInSeconds) => {
+    if (player) {
+      player.seekTo(timeInSeconds); // YouTube 동영상을 클릭한 타임스탬프 시간으로 이동
+    }
+  };
 
   // STT 작업을 수동으로 실행하는 함수
   const handleSTT = async () => {
@@ -112,6 +175,20 @@ const MyCourses = ({ videoId }) => {
           allowFullScreen
           className="youtube-video"
         ></iframe>
+        <button onClick={generateTimestamps} disabled={!playerReady}>
+          타임스탬프 생성
+        </button> {/* 타임스탬프 생성 버튼 추가, Player가 준비되지 않으면 비활성화 */}
+      </div>
+      <div className="timestamps-container">
+        {timestamps.length > 0 && (
+          <ul>
+            {timestamps.map((timestamp, index) => (
+              <li key={index} onClick={() => handleTimestampClick(timestampSeconds[index])} style={{cursor: 'pointer'}}>
+                {timestamp}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
       <div className="course-notes">
         <div className="course-notes-header">
