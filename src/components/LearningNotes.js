@@ -1,4 +1,5 @@
 //LearningNotes.js
+
 import React, { useEffect, useState } from 'react';
 import './LearningNotes.css';
 import { fetchNotes, fetchNote, deleteNote } from '../api/api';
@@ -8,9 +9,10 @@ const LearningNotes = () => {
   const [selectedNote, setSelectedNote] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
 
+  // 노트 목록 가져오기
   const fetchNotesContent = async () => {
     try {
-      const data = await fetchNotes();
+      const data = await fetchNotes(); // API
       setNotes(data);
     } catch (error) {
       console.error('노트 목록을 가져오는 중 오류 발생:', error);
@@ -18,9 +20,10 @@ const LearningNotes = () => {
     }
   };
 
+  // 노트 클릭-> 특정 노트의 내용을 가져와서 화면에 표시
   const handleNoteClick = async (noteId) => {
     try {
-      const note = await fetchNote(noteId);
+      const note = await fetchNote(noteId); // 클릭한 노트의 ID로 API 호출
       setSelectedNote(note);
     } catch (error) {
       console.error('노트 내용을 가져오는 중 오류 발생:', error);
@@ -28,10 +31,11 @@ const LearningNotes = () => {
     }
   };
 
+  //노트 삭제
   const handleDeleteNote = async (noteId, e) => {
-    e.stopPropagation(); // 삭제 버튼 클릭 시 노트 열림 방지
+    e.stopPropagation(); 
     try {
-      await deleteNote(noteId);
+      await deleteNote(noteId); // API
       fetchNotesContent();
     } catch (error) {
       console.error('노트를 삭제하는 중 오류 발생:', error);

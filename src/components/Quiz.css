@@ -1,6 +1,7 @@
+/* Quiz.css */
 .quiz-page-container {
   display: grid;
-  grid-template-columns: 350px 1fr; /* 사이드바 고정 너비, 메인 콘텐츠 유동 너비 */
+  grid-template-columns: 350px 1fr; 
   height: 100vh;
   background-color: #ffffff;
 }
@@ -13,7 +14,7 @@
 }
 
 .quiz-sidebar {
-  width: 100%; /* 그리드 열의 전체 너비 사용 */
+  width: 100%; 
   background-color: var(--background-color);
   border-right: 1px solid var(--border-color);
   padding: 20px;

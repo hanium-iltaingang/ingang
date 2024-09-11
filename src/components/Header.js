@@ -1,3 +1,5 @@
+//Header.js
+
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom'; 
 import logo from '../assets/logo.png'; 
@@ -14,7 +16,7 @@ const Header = () => {
     <header className="header">
       <div className="top-bar">
         <div className="logo-and-search">
-          <Link to="/"> {/* 로고를 클릭했을 때 홈 페이지로 이동하도록 Link 추가 */}
+          <Link to="/">
             <img src={logo} alt="사이트 로고" className="logo" /> 
           </Link>
           <input type="text" className="search-bar" placeholder="검색" />
@@ -29,8 +31,6 @@ const Header = () => {
           <li><Link to="/my-courses">MY 강의</Link></li> 
           <li><Link to="/learning-notes">학습노트</Link></li> 
           <li><Link to="/quiz">퀴즈</Link></li> 
-          <li><Link to="/road-map">로드맵</Link></li> 
-          <li><Link to="/community">커뮤니티</Link></li> 
           <li><Link to="/my-page">마이페이지</Link></li>
         </ul>
       </nav>

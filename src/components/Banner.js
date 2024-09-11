@@ -1,5 +1,4 @@
-//Banner.js
-// 웹사이트의 배너&상단 영역을 구성
+//Banner.js : 웹사이트의 배너&상단 영역을 구성
 import React from 'react';
 import CourseCard from './CourseCard';
 import awsImage from '../assets/event_01.png';

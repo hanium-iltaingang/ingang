@@ -1,5 +1,4 @@
-// CourseCard.js
-// 특정 강의를 카드 형태로 표시 - 메인 페이지에 사용
+// CourseCard.js : 특정 강의를 카드 형태로 표시 - 메인 페이지에 사용
 import React from 'react';
 import './CourseCard.css';
 

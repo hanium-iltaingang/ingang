@@ -1,10 +1,11 @@
 // api.js
 import axios from './axiosConfig';
 
+// STT 기능 시작 API 요청 
 export const startSTT = async (youtubeUrl) => {
   try {
     const response = await axios.post('/video/transcribe', null, {
-      params: { youtubeUrl } // 쿼리 파라미터로 전송
+      params: { youtubeUrl } 
     });
     return response.data;
   } catch (error) {
@@ -13,8 +14,7 @@ export const startSTT = async (youtubeUrl) => {
   }
 };
 
-
-// 학습 노트를 가져오는 API 요청 함수
+// 학습 노트를 가져오는 API 요청 
 export const fetchNotes = async () => {
   try {
     const response = await axios.get('/note', { responseType: 'json' });
@@ -25,7 +25,7 @@ export const fetchNotes = async () => {
   }
 };
 
-// 특정 학습 노트를 가져오는 API 요청 함수 (notesid를 사용)
+// 특정 학습 노트를 가져오는 API 요청 
 export const fetchNote = async (notesid) => {
   try {
     const response = await axios.get(`/note/${notesid}`, { responseType: 'json' });
@@ -36,7 +36,7 @@ export const fetchNote = async (notesid) => {
   }
 };
 
-// 학습 노트를 생성하는 API 요청 함수
+// 학습 노트를 생성하는 API 요청 
 export const createNote = async (notesid, title, contents, author = 'Default Author') => {
   try {
     const response = await axios.post(`/note/${notesid}`, { title, contents, author });
@@ -47,7 +47,7 @@ export const createNote = async (notesid, title, contents, author = 'Default Aut
   }
 };
 
-// 학습 노트를 삭제하는 API 요청 함수 (notesid를 사용)
+// 학습 노를 삭제 API 요청 
 export const deleteNote = async (notesid) => {
   try {
     const response = await axios.delete(`/note/${notesid}`);
@@ -58,7 +58,7 @@ export const deleteNote = async (notesid) => {
   }
 };
 
-// 학습 노트를 편집하는 API 요청 함수 (notesid를 사용)
+// 학습 노트 편집 API 요청 
 export const editNote = async (notesid, title, contents, author = 'Default Author') => {
   try {
     const response = await axios.patch(`/note/${notesid}`, { title, contents, author });

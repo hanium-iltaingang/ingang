@@ -1,10 +1,14 @@
-/*Mycourses.css*/
+/*MyCourse.css*/
+* {
+  box-sizing: border-box;
+}
+
 .my-courses-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
   padding: 20px;
-  gap: 20px;
+  gap: 60px; 
   margin-top: 20px;
 }
 
@@ -13,32 +17,64 @@
   border-radius: 8px;
   padding: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  flex-grow: 0; 
 }
 
 .video-wrapper {
   flex: 2;
-  max-width: 1200px; /* 최대 너비를 더 크게 설정 */
+  max-width: 1200px;
+  padding-left: 20px;
 }
 
 .youtube-video {
   width: 100%;
-  height: 800px; /* 높이를 원래 크기로 유지 */
+  height: 800px;
   border-radius: 8px;
+}
+
+.timestamps-container {
+  flex: 0.5;
+  max-width: 150px;
+  display: flex;
+  flex-direction: column;
+  padding-left: 130px;
+  align-items: flex-start;
+}
+
+.timestamps-container ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.timestamps-container li {
+  margin-bottom: 20px;
+  font-size: 19px;
+  cursor: pointer;
+  color: #006400;
+}
+
+.timestamps-container h2 {
+  margin-bottom: 10px;
+  color: #006400;
+  text-align: center;
+  margin-left: -57px;
+  white-space: nowrap; 
 }
 
 .course-notes {
   flex: 1;
-  min-width: 400px; /* 최소 너비를 더 크게 설정 */
-  max-width: 600px; /* 최대 너비를 더 크게 설정 */
+  min-width: 400px;
+  max-width: 600px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  height: 800px; /* 높이를 원래 크기로 유지 */
+  height: 830px;
 }
 
 .course-notes-header {
   display: flex;
-  justify-content: space-between; /* 제목과 버튼을 양쪽 끝으로 정렬 */
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -57,6 +93,16 @@
   color: white;
 }
 
+.time-stamp--btn {
+  padding: 8px 14px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #00BFFF;
+  color: black;
+}
+
 .course-notes button.new-note-btn:hover {
   background-color: #0056b3;
 }
@@ -73,7 +119,7 @@
 }
 
 .edit-notes input {
-  width: 550px;
+  width: 100%; 
   height: 30px;
   padding: 10px;
   font-size: 16px;
@@ -82,9 +128,9 @@
   margin-top: 5px;
 }
 
-.note-content { /* 노트 내용 입력창에만 적용되는 스타일 */
-  width: 580px;
-  height: 500px; /* 원하는 높이 설정 */
+.note-content {
+  width: 100%;
+  height: 500px;
   padding: 10px;
   font-size: 16px;
   border: 1px solid var(--border-color);
@@ -112,12 +158,12 @@
 .notes-container {
   display: flex;
   flex-direction: column;
-  height: 100%; /* 전체 높이를 사용하도록 설정 */
-  justify-content: space-between; /* 내용물 사이에 공간을 분배 */
+  height: 100%;
+  justify-content: space-between;
 }
 
 .fetch-stt-container {
-  margin-top: auto; /* 버튼을 컨테이너의 아래로 밀기 */
+  margin-top: auto;
   border: none;
 }
 

@@ -7,7 +7,6 @@ const MyPage = () => {
     <div className="my-page">
       <h1>마이페이지</h1>
       <p>추가.</p>
-      {/* 사용자 정보와 활동 내역 등을 여기에 추가할 수 있습니다 */}
     </div>
   );
 };

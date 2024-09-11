@@ -1,3 +1,4 @@
+//Login.js
 import React from "react";
 import { Link } from "react-router-dom"; 
 import "./Login.css";
@@ -47,7 +48,7 @@ const Login = () => {
 
         <div className="login-options">
           <a href="/">아이디 찾기</a> | <a href="/">비밀번호 찾기</a> | 
-          <Link to="/register" className="register-link">회원가입</Link> {/* Link 컴포넌트를 사용하여 register 페이지로 이동 */}
+          <Link to="/register" className="register-link">회원가입</Link>
         </div>
       </div>
     </div>
