@@ -7,7 +7,7 @@
 
 #사용자 지정 - stt 파일, 파이썬 가상환경
 stt.txt
-videopython
+videopython/
 
 # User-specific stuff
 .idea/**/workspace.xml
