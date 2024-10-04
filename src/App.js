@@ -40,7 +40,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/my-courses" element={<MyCourses videoId="ntP6RmaG7gk" />} /> 
           <Route path="/learning-notes" element={<LearningNotes />} />
-          <Route path="/quiz" element={<Quiz />} />
+          <Route path="/quiz" element={<Quiz videoId="ntP6RmaG7gk" />} />
           <Route path="/my-page" element={<MyPage />} />
         </Routes>
       </div>

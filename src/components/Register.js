@@ -1,3 +1,4 @@
+//Register.js
 import React from "react";
 import "./Register.css";
 import logo from '../assets/logo.png';
