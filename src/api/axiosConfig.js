@@ -4,7 +4,7 @@ import axios from 'axios';
 
 // axios 인스턴스 생성
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8080'
+  baseURL: 'http://43.200.40.144:8080'
 });
 
 export default axiosInstance;
