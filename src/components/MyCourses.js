@@ -39,6 +39,7 @@ const MyCourses = ({ videoId }) => {
 
     const onYouTubeIframeAPIReady = () => {
       if (window.YT && window.YT.Player) {
+        // eslint-disable-next-line no-unused-vars
         const ytPlayer = new window.YT.Player('youtube-player', {
           videoId: videoId,
           events: {
